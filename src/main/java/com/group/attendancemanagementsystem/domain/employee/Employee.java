@@ -37,8 +37,13 @@ public class Employee {
 
     @Column(nullable = false)
     private LocalDate workStartDate;
+    private String teamName;
 
     public void changeRole(Role role) {
         this.role = role;
+    }
+
+    public String getTeamName() {
+        return teamName;
     }
 }

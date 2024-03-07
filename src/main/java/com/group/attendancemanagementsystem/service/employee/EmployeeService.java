@@ -4,11 +4,15 @@ import com.group.attendancemanagementsystem.domain.employee.Employee;
 import com.group.attendancemanagementsystem.domain.role.Role;
 import com.group.attendancemanagementsystem.domain.team.Team;
 import com.group.attendancemanagementsystem.dto.employee.request.RegisterEmployeeRequest;
+import com.group.attendancemanagementsystem.dto.employee.response.EmployeeListResponse;
 import com.group.attendancemanagementsystem.repository.employee.EmployeeRepository;
 import com.group.attendancemanagementsystem.repository.team.TeamRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,5 +40,12 @@ public class EmployeeService {
         }
 
         team.addEmployee();
+    }
+
+    public List<EmployeeListResponse> getEmployeeList() {
+        return employeeRepository.findAll().stream()
+                .map(employee -> new EmployeeListResponse(employee.getName(), employee.getTeamName(),
+                        employee.getRole(), employee.getBirthday(), employee.getWorkStartDate()))
+                .collect(Collectors.toList());
     }
 }
