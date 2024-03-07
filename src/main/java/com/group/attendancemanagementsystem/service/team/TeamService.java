@@ -15,6 +15,11 @@ public class TeamService {
 
     @Transactional
     public void registerTeam(RegisterTeamRequest request) {
-        teamRepository.save(new Team(request.getName()));
+
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new IllegalArgumentException("팀 이름은 필수입니다.");
+        }
+
+        teamRepository.save(Team.builder().name(request.getName()).build());
     }
 }
