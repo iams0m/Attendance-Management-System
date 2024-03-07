@@ -22,7 +22,7 @@ public class Team {
     @Column(nullable = false)
     private String name;
     private String manager;
-    private Long memberCount;
+    private int memberCount;
 
     @OneToMany(mappedBy = "team")
     private List<Employee> employees = new ArrayList<>();
