@@ -8,44 +8,62 @@ import com.group.attendancemanagementsystem.dto.employee.response.EmployeeListRe
 import com.group.attendancemanagementsystem.repository.employee.EmployeeRepository;
 import com.group.attendancemanagementsystem.repository.team.TeamRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final TeamRepository teamRepository;
 
+    public EmployeeService(EmployeeRepository employeeRepository, TeamRepository teamRepository) {
+        this.employeeRepository = employeeRepository;
+        this.teamRepository = teamRepository;
+    }
+
     @Transactional
     public void registerEmployee(RegisterEmployeeRequest request) {
 
-        Team team = teamRepository.findById(request.getTeamName())
-                .orElseThrow(IllegalArgumentException::new);
+        Team team = null;
 
-        employeeRepository.save(Employee.builder()
-                .name(request.getName())
-                .team(team)
-                .role(request.getRole())
-                .birthday(request.getBirthday())
-                .workStartDate(request.getWorkStartDate())
-                .build());
-
-        if (request.getRole() == Role.MANAGER) {
-            team.setManager(request.getName());
+        if (request.getTeamName() != null) {
+            team = teamRepository.findByName(request.getTeamName())
+                    .orElseThrow(IllegalArgumentException::new);
         }
 
-        team.addEmployee();
+        Employee employee = new Employee(
+                request.getName(),
+                team,
+                request.getRole(),
+                request.getBirthday(),
+                request.getWorkStartDate()
+        );
+
+        employeeRepository.save(employee);
+
+        if (employee.getRole() == Role.MANAGER) {
+            team.setManager(request.getName());
+            teamRepository.save(team);
+        }
     }
 
+    @Transactional
     public List<EmployeeListResponse> getEmployeeList() {
-        return employeeRepository.findAll().stream()
-                .map(employee -> new EmployeeListResponse(employee.getName(), employee.getTeamName(),
-                        employee.getRole(), employee.getBirthday(), employee.getWorkStartDate()))
-                .collect(Collectors.toList());
+        List<Employee> employeeList = employeeRepository.findAll();
+
+        return employeeList.stream()
+                .map(employee -> {
+                    String teamName = employee.getTeam() != null ? employee.getTeam().getName() : null;
+                    return new EmployeeListResponse(
+                            employee.getName(),
+                            teamName,
+                            employee.getRole(),
+                            employee.getBirthday(),
+                            employee.getWorkStartDate()
+                    );
+                }).collect(Collectors.toList());
     }
 }
