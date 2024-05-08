@@ -25,7 +25,7 @@ public class Employee {
     private String name;
 
     @ManyToOne
-    @JoinColumn(nullable = false, name = "team_name")
+    @JoinColumn(nullable = false)
     private Team team;
 
     @Column(nullable = false)
@@ -37,13 +37,11 @@ public class Employee {
 
     @Column(nullable = false)
     private LocalDate workStartDate;
+
+    @Column(insertable = false, updatable = false, name = "team_name")
     private String teamName;
 
     public void changeRole(Role role) {
         this.role = role;
-    }
-
-    public String getTeamName() {
-        return teamName;
     }
 }
