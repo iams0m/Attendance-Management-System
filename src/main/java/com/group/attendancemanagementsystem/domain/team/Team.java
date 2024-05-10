@@ -12,38 +12,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Team {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(nullable = false)
     private String name;
+
     private String manager;
-    private int memberCount;
 
     @OneToMany(mappedBy = "team")
-    private List<Employee> employees = new ArrayList<>();
+    List<Employee> employees = new ArrayList<>();
 
-    public void addEmployee() {
-        this.memberCount++;
+    private Long employeeCount;
+
+    protected Team() {
     }
 
-    public void setManager(String name) {
-        changeRole();
-        this.manager = name;
+    public Team(String name) {
+        this.name = name;
+        this.employeeCount = 0L;
     }
 
-    private void changeRole() {
-        if(this.manager == null) return;
-
-        Employee findEmployee = this.employees.stream()
-                .filter(employee -> employee.getRole() == Role.MANAGER)
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-
-        findEmployee.changeRole(Role.MEMBER);
+    public Long getId() {
+        return id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public Long getEmployeeCount() {
+        return employeeCount;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
+    public void addEmployee(Employee employee) {
+        employees.add(employee);
+        employeeCount++;
+    }
+
 }
