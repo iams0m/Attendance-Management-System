@@ -1,7 +1,7 @@
 package com.group.attendancemanagementsystem.controller.employee;
 
 import com.group.attendancemanagementsystem.dto.employee.request.RegisterEmployeeRequest;
-import com.group.attendancemanagementsystem.dto.employee.response.EmployeeListResponse;
+import com.group.attendancemanagementsystem.dto.employee.response.EmployeeFindAllResponse;
 import com.group.attendancemanagementsystem.service.employee.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees")
-    public List<EmployeeListResponse> getEmployeeList() {
-        return employeeService.getEmployeeList();
+    public List<EmployeeFindAllResponse> findAllEmployee() {
+        return employeeService.findAllEmployee();
     }
 }

@@ -4,7 +4,7 @@ import com.group.attendancemanagementsystem.domain.employee.Employee;
 import com.group.attendancemanagementsystem.domain.role.Role;
 import com.group.attendancemanagementsystem.domain.team.Team;
 import com.group.attendancemanagementsystem.dto.employee.request.RegisterEmployeeRequest;
-import com.group.attendancemanagementsystem.dto.employee.response.EmployeeListResponse;
+import com.group.attendancemanagementsystem.dto.employee.response.EmployeeFindAllResponse;
 import com.group.attendancemanagementsystem.repository.employee.EmployeeRepository;
 import com.group.attendancemanagementsystem.repository.team.TeamRepository;
 import jakarta.transaction.Transactional;
@@ -51,13 +51,13 @@ public class EmployeeService {
     }
 
     @Transactional
-    public List<EmployeeListResponse> getEmployeeList() {
+    public List<EmployeeFindAllResponse> findAllEmployee() {
         List<Employee> employeeList = employeeRepository.findAll();
 
         return employeeList.stream()
                 .map(employee -> {
                     String teamName = employee.getTeam() != null ? employee.getTeam().getName() : null;
-                    return new EmployeeListResponse(
+                    return new EmployeeFindAllResponse(
                             employee.getName(),
                             teamName,
                             employee.getRole(),

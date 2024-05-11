@@ -4,7 +4,7 @@ import com.group.attendancemanagementsystem.domain.role.Role;
 
 import java.time.LocalDate;
 
-public class EmployeeListResponse {
+public class EmployeeFindAllResponse {
 
     private String name;
     private String teamName;
@@ -12,10 +12,10 @@ public class EmployeeListResponse {
     private LocalDate birthday;
     private LocalDate workStartDate;
 
-    protected EmployeeListResponse() {
+    protected EmployeeFindAllResponse() {
     }
 
-    public EmployeeListResponse(String name, String teamName, Role role, LocalDate birthday, LocalDate workStartDate) {
+    public EmployeeFindAllResponse(String name, String teamName, Role role, LocalDate birthday, LocalDate workStartDate) {
         this.name = name;
         this.teamName = teamName;
         this.role = role;
