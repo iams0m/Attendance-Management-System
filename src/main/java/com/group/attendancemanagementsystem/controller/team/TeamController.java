@@ -1,7 +1,7 @@
 package com.group.attendancemanagementsystem.controller.team;
 
 import com.group.attendancemanagementsystem.dto.team.request.RegisterTeamRequest;
-import com.group.attendancemanagementsystem.dto.team.response.TeamListResponse;
+import com.group.attendancemanagementsystem.dto.team.response.TeamFindAllResponse;
 import com.group.attendancemanagementsystem.service.team.TeamService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +25,8 @@ public class TeamController {
     }
 
     @GetMapping("/teams")
-    public List<TeamListResponse> getTeamList() {
-        return teamService.getTeamList();
+    public List<TeamFindAllResponse> teamFindAllResponses() {
+        return teamService.teamFindAllResponses();
     }
 
 }

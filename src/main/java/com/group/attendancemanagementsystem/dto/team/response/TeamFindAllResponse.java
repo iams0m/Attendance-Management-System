@@ -1,15 +1,15 @@
 package com.group.attendancemanagementsystem.dto.team.response;
 
-public class TeamListResponse {
+public class TeamFindAllResponse {
 
     private String name;
     private String manager;
     private Long memberCount;
 
-    protected TeamListResponse() {
+    protected TeamFindAllResponse() {
     }
 
-    public TeamListResponse(String name, String manager, Long memberCount) {
+    public TeamFindAllResponse(String name, String manager, Long memberCount) {
         this.name = name;
         this.manager = manager;
         this.memberCount = memberCount;

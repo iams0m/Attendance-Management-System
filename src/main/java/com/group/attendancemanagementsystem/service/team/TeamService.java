@@ -2,7 +2,7 @@ package com.group.attendancemanagementsystem.service.team;
 
 import com.group.attendancemanagementsystem.domain.team.Team;
 import com.group.attendancemanagementsystem.dto.team.request.RegisterTeamRequest;
-import com.group.attendancemanagementsystem.dto.team.response.TeamListResponse;
+import com.group.attendancemanagementsystem.dto.team.response.TeamFindAllResponse;
 import com.group.attendancemanagementsystem.repository.team.TeamRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -30,11 +30,11 @@ public class TeamService {
         teamRepository.save(team);
     }
 
-    public List<TeamListResponse> getTeamList() {
+    public List<TeamFindAllResponse> teamFindAllResponses() {
 
         List<Team> teamList = teamRepository.findAll();
         return teamList.stream()
-                .map(team -> new TeamListResponse(
+                .map(team -> new TeamFindAllResponse(
                         team.getName(),
                         team.getManager(),
                         team.getEmployeeCount()
