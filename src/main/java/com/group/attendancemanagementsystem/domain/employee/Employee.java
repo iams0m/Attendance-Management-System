@@ -11,13 +11,14 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "employee_id")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_name")
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @Column(nullable = false)
@@ -63,9 +64,5 @@ public class Employee {
 
     public LocalDate getWorkStartDate() {
         return workStartDate;
-    }
-
-    public void changeRole(Role role) {
-        this.role = role;
     }
 }
