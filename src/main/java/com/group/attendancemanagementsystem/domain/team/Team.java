@@ -3,10 +3,6 @@ package com.group.attendancemanagementsystem.domain.team;
 import com.group.attendancemanagementsystem.domain.employee.Employee;
 import com.group.attendancemanagementsystem.domain.role.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +53,11 @@ public class Team {
         return employeeCount;
     }
 
-    public void setManager(String manager) {
+    public boolean hasManager() {
+        return employees.stream().anyMatch(employee -> employee.getRole() == Role.MANAGER);
+    }
+
+    public void setManagerName(String manager) {
         this.manager = manager;
     }
 
@@ -65,5 +65,8 @@ public class Team {
         employees.add(employee);
         employeeCount++;
     }
+
+
+
 
 }
