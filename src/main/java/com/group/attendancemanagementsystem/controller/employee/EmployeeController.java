@@ -22,7 +22,7 @@ public class EmployeeController {
         employeeService.registerEmployee(request);
     }
 
-    @GetMapping("/employees")
+    @GetMapping("/employee")
     public List<EmployeeFindAllResponse> findAllEmployee() {
         return employeeService.findAllEmployee();
     }

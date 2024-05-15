@@ -24,7 +24,7 @@ public class TeamController {
         teamService.registerTeam(request);
     }
 
-    @GetMapping("/teams")
+    @GetMapping("/team")
     public List<TeamFindAllResponse> teamFindAllResponses() {
         return teamService.teamFindAllResponses();
     }
