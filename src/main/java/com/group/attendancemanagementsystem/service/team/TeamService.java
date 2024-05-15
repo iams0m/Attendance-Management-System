@@ -23,7 +23,7 @@ public class TeamService {
     public void registerTeam(RegisterTeamRequest request) {
 
         if (teamRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException(String.format("(%s)는 이미 존재하는 팀입니다.", request.getName()));
+            throw new IllegalArgumentException(String.format("이미 존재하는 팀입니다."));
         }
 
         Team team = new Team(request.getName());
