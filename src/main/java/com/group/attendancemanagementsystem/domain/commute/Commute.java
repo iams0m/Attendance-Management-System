@@ -25,10 +25,10 @@ public class Commute {
     protected Commute() {
     }
 
-    public Commute(Employee employee, LocalDate date, LocalTime startedAt) {
+    public Commute(Employee employee) {
         this.employee = employee;
-        this.date = date;
-        this.startedAt = startedAt;
+        this.date = LocalDate.now();
+        this.startedAt = LocalTime.now();
     }
 
     public Long getId() {
