@@ -50,4 +50,12 @@ public class Commute {
     public LocalTime getEndedAt() {
         return endedAt;
     }
+
+    // 퇴근 처리
+    public void endCommute(LocalTime endedAt) {
+        if (this.endedAt != null) {
+            throw new IllegalArgumentException("이미 퇴근 처리되었습니다.");
+        }
+        this.endedAt = endedAt;
+    }
 }
