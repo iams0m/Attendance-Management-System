@@ -1,10 +1,13 @@
 package com.group.attendancemanagementsystem.domain.employee;
 
+import com.group.attendancemanagementsystem.domain.commute.Commute;
 import com.group.attendancemanagementsystem.domain.role.Role;
 import com.group.attendancemanagementsystem.domain.team.Team;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Employee {
@@ -30,6 +33,9 @@ public class Employee {
 
     @Column(nullable = false)
     private LocalDate workStartDate;
+
+    @OneToMany(mappedBy = "employee")
+    List<Commute> commutes = new ArrayList<>();
 
     protected Employee() {
     }
@@ -64,5 +70,9 @@ public class Employee {
 
     public LocalDate getWorkStartDate() {
         return workStartDate;
+    }
+
+    public List<Commute> getCommutes() {
+        return commutes;
     }
 }
