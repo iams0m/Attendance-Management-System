@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Service
 public class CommuteService {
@@ -32,6 +33,21 @@ public class CommuteService {
         } else {
             throw new IllegalArgumentException("이미 출근한 직원입니다.");
         }
+    }
+
+    @Transactional
+    public void endedCommute(Long employeeId) {
+
+        // 직원 조회
+        Employee employee = getEmployeeById(employeeId);
+
+        // 당일 출근 기록이 없는 경우
+        Commute commute = commuteRepository.findCommuteByEmployeeAndDate(employee, LocalDate.now())
+                .orElseThrow(() -> new IllegalArgumentException("출근 기록이 없습니다."));
+
+        // 출근 기록이 있는 경우 퇴근 처리
+        commute.endCommute(LocalTime.now());
+        commuteRepository.save(commute);
     }
 
     private Employee getEmployeeById(Long employeeId) {
