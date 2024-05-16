@@ -17,4 +17,9 @@ public class CommuteController {
     public void startedCommute(@RequestParam(name = "employeeId") Long employeeId) {
         commuteService.startedCommute(employeeId);
     }
+
+    @PostMapping("/commute/end")
+    public void endedCommute(@RequestParam(name = "employeeId") Long employeeId) {
+        commuteService.endedCommute(employeeId);
+    }
 }
