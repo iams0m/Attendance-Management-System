@@ -2,13 +2,20 @@ package com.group.attendancemanagementsystem.service.commute;
 
 import com.group.attendancemanagementsystem.domain.commute.Commute;
 import com.group.attendancemanagementsystem.domain.employee.Employee;
+import com.group.attendancemanagementsystem.dto.commute.request.CommuteByAllDayOfMonthRequest;
+import com.group.attendancemanagementsystem.dto.commute.response.CommuteResponse;
+import com.group.attendancemanagementsystem.dto.commute.response.DetailResponse;
 import com.group.attendancemanagementsystem.repository.commute.CommuteRepository;
 import com.group.attendancemanagementsystem.repository.employee.EmployeeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CommuteService {
@@ -54,4 +61,48 @@ public class CommuteService {
         return employeeRepository.findEmployeeById(employeeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 직원입니다."));
     }
+
+    @Transactional(readOnly = true)
+    public CommuteResponse employeeCommuteByAllDayOfMonth(CommuteByAllDayOfMonthRequest request) {
+
+        // 직원 조회
+        Employee employee = getEmployeeById(request.getId());
+
+        // 입력 받은 날짜 치환
+        String yearMonthString = request.getDate();
+        LocalDate startWithOfMonth = YearMonth.parse(yearMonthString).atDay(1);
+        LocalDate endWithOfMonth = YearMonth.parse(yearMonthString).atEndOfMonth();
+
+        // 해당 월의 직원 근무 기록 가져오기
+        List<Commute> commuteList = commuteRepository
+                .findCommutesByEmployeeIdAndDateBetween(employee.getId(), startWithOfMonth, endWithOfMonth);
+
+        // detail 안의 날짜, 근무 시간 분으로 변환
+        List<DetailResponse> detailResponse = new ArrayList<>();
+
+        LocalDate currentDate = startWithOfMonth;
+
+        while (!currentDate.isAfter(endWithOfMonth)) {
+            LocalDate finalCurrentDate = currentDate; // 새로운 변수에 할당
+
+            long workingMinutes = calculateWorkingMinutes(commuteList, currentDate);
+            detailResponse.add(new DetailResponse(currentDate, workingMinutes));
+
+            currentDate = currentDate.plusDays(1);
+        }
+
+        // 해당 달의 모든 근무 시간 합하기
+        long sum = detailResponse.stream()
+                .mapToLong(DetailResponse::getWorkingMinutes)
+                .sum();
+
+        return new CommuteResponse(detailResponse, sum);
+    }
+
+    private long calculateWorkingMinutes(List<Commute> commuteList, LocalDate date) {
+        return commuteList.stream()
+                .filter(commute -> commute.getDate().equals(date))
+                .mapToLong(commute -> Duration.between(commute.getStartedAt(), commute.getEndedAt()).toMinutes())
+                .sum();
+    } 
 }
