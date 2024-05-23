@@ -2,16 +2,16 @@ package com.group.attendancemanagementsystem.dto.dayOff.request;
 
 import java.time.LocalDate;
 
-public class DayOffRegisterRequest {
+public class RegisterDayOffRequest {
 
     private Long id;
 
     private LocalDate date;
 
-    protected DayOffRegisterRequest() {
+    protected RegisterDayOffRequest() {
     }
 
-    public DayOffRegisterRequest(Long id, LocalDate date) {
+    public RegisterDayOffRequest(Long id, LocalDate date) {
         this.id = id;
         this.date = date;
     }
