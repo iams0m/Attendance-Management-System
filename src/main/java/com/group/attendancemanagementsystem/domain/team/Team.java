@@ -1,5 +1,6 @@
 package com.group.attendancemanagementsystem.domain.team;
 
+import com.group.attendancemanagementsystem.domain.dayOff.DayOffRule;
 import com.group.attendancemanagementsystem.domain.employee.Employee;
 import com.group.attendancemanagementsystem.domain.role.Role;
 import jakarta.persistence.*;
@@ -24,6 +25,9 @@ public class Team {
     List<Employee> employees = new ArrayList<>();
 
     private Long employeeCount;
+
+    @OneToOne(mappedBy = "team")
+    private DayOffRule dayOffRule;
 
     protected Team() {
     }
@@ -51,6 +55,10 @@ public class Team {
 
     public Long getEmployeeCount() {
         return employeeCount;
+    }
+
+    public DayOffRule getDayOffRule() {
+        return dayOffRule;
     }
 
     public boolean hasManager() {
