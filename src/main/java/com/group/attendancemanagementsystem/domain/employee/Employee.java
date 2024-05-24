@@ -1,6 +1,7 @@
 package com.group.attendancemanagementsystem.domain.employee;
 
 import com.group.attendancemanagementsystem.domain.commute.Commute;
+import com.group.attendancemanagementsystem.domain.dayOff.DayOff;
 import com.group.attendancemanagementsystem.domain.role.Role;
 import com.group.attendancemanagementsystem.domain.team.Team;
 import jakarta.persistence.*;
@@ -36,6 +37,9 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     List<Commute> commutes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "employee")
+    List<DayOff> dayOffs = new ArrayList<>();
 
     protected Employee() {
     }
