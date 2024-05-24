@@ -79,4 +79,13 @@ public class Employee {
     public List<Commute> getCommutes() {
         return commutes;
     }
+
+    public List<DayOff> getDayOffs() {
+        return dayOffs;
+    }
+
+    public boolean isDayOffUsedOnDate(LocalDate date) {
+        return dayOffs.stream()
+                .anyMatch(dayOff -> dayOff.getDate().equals(date));
+    }
 }
