@@ -2,9 +2,7 @@ package com.group.attendancemanagementsystem.controller.dayOff;
 
 import com.group.attendancemanagementsystem.dto.dayOff.request.RegisterDayOffRequest;
 import com.group.attendancemanagementsystem.service.dayOff.DayOffService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class DayOffController {
@@ -16,7 +14,7 @@ public class DayOffController {
     }
 
     @PostMapping("/dayoff")
-    public void registerDayOff(@RequestParam RegisterDayOffRequest request) {
+    public void registerDayOff(@RequestBody RegisterDayOffRequest request) {
         dayOffService.registerDayOff(request);
     }
 }
