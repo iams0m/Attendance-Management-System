@@ -52,6 +52,22 @@ public class DayOffService {
         }
     }
 
+    @Transactional
+    public int countDayOff(Long id) {
+
+        // 직원 조회
+        Employee employee = getEmployeeById(id);
+
+        // 남은 연차 수 확인
+        long countedDayOff = countRemainingDayOff(employee);
+
+        if (isFreshMan(employee)) {
+            return (int) (FRESHMAN_DAY_OFF_COUNT - countedDayOff);
+        } else {
+            return (int) (DAY_OFF_COUNT - countedDayOff);
+        }
+    }
+
     private boolean isDayOffExists(Employee employee, LocalDate date) {
         return dayOffRepository.existsDayOffByEmployeeAndDate(employee, date);
     }

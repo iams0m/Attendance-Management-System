@@ -17,4 +17,9 @@ public class DayOffController {
     public void registerDayOff(@RequestBody RegisterDayOffRequest request) {
         dayOffService.registerDayOff(request);
     }
+
+    @GetMapping("/dayoff")
+    public int countDayOff(@RequestParam(name = "id") Long id) {
+        return dayOffService.countDayOff(id);
+    }
 }
