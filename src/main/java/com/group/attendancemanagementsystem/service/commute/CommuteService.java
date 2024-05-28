@@ -1,11 +1,13 @@
 package com.group.attendancemanagementsystem.service.commute;
 
 import com.group.attendancemanagementsystem.domain.commute.Commute;
+import com.group.attendancemanagementsystem.domain.dayOff.DayOff;
 import com.group.attendancemanagementsystem.domain.employee.Employee;
 import com.group.attendancemanagementsystem.dto.commute.request.CommuteByAllDayOfMonthRequest;
 import com.group.attendancemanagementsystem.dto.commute.response.CommuteResponse;
 import com.group.attendancemanagementsystem.dto.commute.response.DetailResponse;
 import com.group.attendancemanagementsystem.repository.commute.CommuteRepository;
+import com.group.attendancemanagementsystem.repository.dayOff.DayOffRepository;
 import com.group.attendancemanagementsystem.repository.employee.EmployeeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +23,12 @@ import java.util.List;
 public class CommuteService {
     private final CommuteRepository commuteRepository;
     private final EmployeeRepository employeeRepository;
+    private final DayOffRepository dayOffRepository;
 
-    public CommuteService(CommuteRepository commuteRepository, EmployeeRepository employeeRepository) {
+    public CommuteService(CommuteRepository commuteRepository, EmployeeRepository employeeRepository, DayOffRepository dayOffRepository) {
         this.commuteRepository = commuteRepository;
         this.employeeRepository = employeeRepository;
+        this.dayOffRepository = dayOffRepository;
     }
 
     @Transactional
@@ -57,11 +61,6 @@ public class CommuteService {
         commuteRepository.save(commute);
     }
 
-    private Employee getEmployeeById(Long employeeId) {
-        return employeeRepository.findEmployeeById(employeeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 직원입니다."));
-    }
-
     @Transactional(readOnly = true)
     public CommuteResponse getEmployeeMonthlyWorkHours(CommuteByAllDayOfMonthRequest request) {
 
@@ -77,6 +76,10 @@ public class CommuteService {
         List<Commute> commuteList = commuteRepository
                 .findCommutesByEmployeeIdAndDateBetween(employee.getId(), startWithOfMonth, endWithOfMonth);
 
+        // 해당 월의 직원 연차 기록 가져오기
+        List<DayOff> dayOffList = dayOffRepository
+                .findDaysOffByEmployeeIdAndDateBetween(employee.getId(), startWithOfMonth, endWithOfMonth);
+
         // detail 안의 날짜, 근무 시간 분으로 변환
         List<DetailResponse> detailResponse = new ArrayList<>();
 
@@ -85,9 +88,17 @@ public class CommuteService {
         while (!currentDate.isAfter(endWithOfMonth)) {
             LocalDate finalCurrentDate = currentDate; // 새로운 변수에 할당
 
-            long workingMinutes = calculateWorkingMinutes(commuteList, currentDate);
-            detailResponse.add(new DetailResponse(currentDate, workingMinutes));
+            boolean usingDayOff = dayOffList.stream()
+                    .anyMatch(dayOff -> dayOff.getDate().equals(finalCurrentDate));
 
+            if (usingDayOff) {
+                // 연차를 사용한 날짜일 경우, 근무 시간을 0으로 설정
+                detailResponse.add(new DetailResponse(currentDate, 0L, true));
+            } else {
+                // 연차를 사용하지 않은 날짜일 경우, 해당 일자의 근무 시간 계산
+                long workingMinutes = calculateWorkingMinutes(commuteList, currentDate);
+                detailResponse.add(new DetailResponse(currentDate, workingMinutes, false));
+            }
             currentDate = currentDate.plusDays(1);
         }
 
@@ -97,6 +108,11 @@ public class CommuteService {
                 .sum();
 
         return new CommuteResponse(detailResponse, sum);
+    }
+
+    private Employee getEmployeeById(Long employeeId) {
+        return employeeRepository.findEmployeeById(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 직원입니다."));
     }
 
     private long calculateWorkingMinutes(List<Commute> commuteList, LocalDate date) {
