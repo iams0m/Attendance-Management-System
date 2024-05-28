@@ -63,7 +63,7 @@ public class CommuteService {
     }
 
     @Transactional(readOnly = true)
-    public CommuteResponse employeeCommuteByAllDayOfMonth(CommuteByAllDayOfMonthRequest request) {
+    public CommuteResponse getEmployeeMonthlyWorkHours(CommuteByAllDayOfMonthRequest request) {
 
         // 직원 조회
         Employee employee = getEmployeeById(request.getId());

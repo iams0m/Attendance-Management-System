@@ -29,6 +29,6 @@ public class CommuteController {
     @GetMapping("/commute")
     public CommuteResponse employeeCommuteByAllDayOfMonth(@RequestParam(name = "id") Long id, @RequestParam(name = "date") String date) {
         CommuteByAllDayOfMonthRequest request = new CommuteByAllDayOfMonthRequest(id, date);
-        return commuteService.employeeCommuteByAllDayOfMonth(request);
+        return commuteService.getEmployeeMonthlyWorkHours(request);
     }
 }
