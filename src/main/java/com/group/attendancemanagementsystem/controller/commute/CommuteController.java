@@ -37,6 +37,6 @@ public class CommuteController {
 
     @GetMapping("/overtime")
     public List<OvertimeResponse> employeeOvertimeList(@RequestParam(name = "date") String date) {
-        return commuteService.employeeOvertimeList(date);
+        return commuteService.calculateOvertimeHours(date);
     }
 }

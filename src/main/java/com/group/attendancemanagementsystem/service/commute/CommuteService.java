@@ -6,6 +6,7 @@ import com.group.attendancemanagementsystem.domain.employee.Employee;
 import com.group.attendancemanagementsystem.dto.commute.request.CommuteByAllDayOfMonthRequest;
 import com.group.attendancemanagementsystem.dto.commute.response.CommuteResponse;
 import com.group.attendancemanagementsystem.dto.commute.response.DetailResponse;
+import com.group.attendancemanagementsystem.dto.commute.response.OvertimeResponse;
 import com.group.attendancemanagementsystem.repository.commute.CommuteRepository;
 import com.group.attendancemanagementsystem.repository.dayOff.DayOffRepository;
 import com.group.attendancemanagementsystem.repository.employee.EmployeeRepository;
@@ -120,5 +121,10 @@ public class CommuteService {
                 .filter(commute -> commute.getDate().equals(date))
                 .mapToLong(commute -> Duration.between(commute.getStartedAt(), commute.getEndedAt()).toMinutes())
                 .sum();
-    } 
+    }
+
+    public List<OvertimeResponse> calculateOvertimeHours(String date) {
+
+
+    }
 }
