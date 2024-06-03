@@ -4,12 +4,12 @@ public class OvertimeResponse {
 
     private Long id;
     private String name;
-    private Long overtimeMinutes;
+    private int overtimeMinutes;
 
     protected OvertimeResponse() {
     }
 
-    public OvertimeResponse(Long id, String name, Long overtimeMinutes) {
+    public OvertimeResponse(Long id, String name, int overtimeMinutes) {
         this.id = id;
         this.name = name;
         this.overtimeMinutes = overtimeMinutes;
@@ -23,7 +23,7 @@ public class OvertimeResponse {
         return name;
     }
 
-    public Long getOvertimeMinutes() {
+    public int getOvertimeMinutes() {
         return overtimeMinutes;
     }
 }
