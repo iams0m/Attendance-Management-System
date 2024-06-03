@@ -22,12 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@PropertySource("classpath:config.properties") // config.properties에 저장된 키 값을 가져올 수 있게 경로 설정
 public class CommuteService {
     private final CommuteRepository commuteRepository;
     private final EmployeeRepository employeeRepository;
     private final DayOffRepository dayOffRepository;
 
     public CommuteService(CommuteRepository commuteRepository, EmployeeRepository employeeRepository, DayOffRepository dayOffRepository) {
+    @Value("${Api-Secret-Key") // config.properties에 저장된 키 값 가져오기
+    public CommuteService(CommuteRepository commuteRepository, EmployeeRepository employeeRepository, DayOffRepository dayOffRepository, RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.commuteRepository = commuteRepository;
         this.employeeRepository = employeeRepository;
         this.dayOffRepository = dayOffRepository;
