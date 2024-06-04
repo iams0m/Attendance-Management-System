@@ -4,6 +4,7 @@ import com.group.attendancemanagementsystem.domain.employee.Employee;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -19,8 +20,8 @@ public class Commute {
     private Employee employee;
 
     private LocalDate date;
-    private LocalTime startedAt;
-    private LocalTime endedAt;
+    private LocalDateTime startedAt;
+    private LocalDateTime endedAt;
 
     protected Commute() {
     }
@@ -28,7 +29,7 @@ public class Commute {
     public Commute(Employee employee) {
         this.employee = employee;
         this.date = LocalDate.now();
-        this.startedAt = LocalTime.now();
+        this.startedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -43,16 +44,16 @@ public class Commute {
         return date;
     }
 
-    public LocalTime getStartedAt() {
+    public LocalDateTime getStartedAt() {
         return startedAt;
     }
 
-    public LocalTime getEndedAt() {
+    public LocalDateTime getEndedAt() {
         return endedAt;
     }
 
     // 퇴근 처리
-    public void endCommute(LocalTime endedAt) {
+    public void endCommute(LocalDateTime endedAt) {
         if (this.endedAt != null) {
             throw new IllegalArgumentException("이미 퇴근 처리되었습니다.");
         }
