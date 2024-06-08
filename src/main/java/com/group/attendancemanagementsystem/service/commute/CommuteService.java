@@ -27,9 +27,9 @@ public class CommuteService {
     private final CommuteRepository commuteRepository;
     private final EmployeeRepository employeeRepository;
     private final DayOffRepository dayOffRepository;
+    @Value("${api.secret.key}") // application.yml에 저장된 키 값 가져오기
 
     public CommuteService(CommuteRepository commuteRepository, EmployeeRepository employeeRepository, DayOffRepository dayOffRepository) {
-    @Value("${Api-Secret-Key") // config.properties에 저장된 키 값 가져오기
     public CommuteService(CommuteRepository commuteRepository, EmployeeRepository employeeRepository, DayOffRepository dayOffRepository, RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.commuteRepository = commuteRepository;
         this.employeeRepository = employeeRepository;
