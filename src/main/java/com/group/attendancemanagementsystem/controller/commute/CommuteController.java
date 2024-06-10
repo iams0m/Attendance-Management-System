@@ -1,6 +1,7 @@
 package com.group.attendancemanagementsystem.controller.commute;
 
 import com.group.attendancemanagementsystem.dto.commute.request.CommuteByAllDayOfMonthRequest;
+import com.group.attendancemanagementsystem.dto.commute.request.YearMonthRequest;
 import com.group.attendancemanagementsystem.dto.commute.response.CommuteResponse;
 import com.group.attendancemanagementsystem.dto.commute.response.OvertimeResponse;
 import com.group.attendancemanagementsystem.service.commute.CommuteService;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.YearMonth;
 import java.util.List;
 
 @RestController
@@ -36,7 +38,7 @@ public class CommuteController {
     }
 
     @GetMapping("/overtime")
-    public List<OvertimeResponse> employeeOvertimeList(@RequestParam(name = "date") String date) {
-        return commuteService.calculateOvertimeHours(date);
+    public List<OvertimeResponse> employeeOvertimeList(YearMonthRequest request) {
+        return commuteService.calculateOvertimeHours(request);
     }
 }
