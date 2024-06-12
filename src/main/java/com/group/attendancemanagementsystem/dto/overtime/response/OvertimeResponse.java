@@ -1,4 +1,4 @@
-package com.group.attendancemanagementsystem.dto.commute.response;
+package com.group.attendancemanagementsystem.dto.overtime.response;
 
 public class OvertimeResponse {
 
