@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OvertimeRepository extends JpaRepository<Commute, Long> {
-    @Query("SELECT c FROM Commute c WHERE c.employee.id = :employeeId AND EXTRACT(YEAR FROM c.startedAt) = :year AND EXTRACT(MONTH FROM c.startedAt) = :month")
+    @Query("SELECT c FROM Commute c WHERE c.employee.id = :employeeId AND FUNCTION('YEAR', c.startedAt) = :year AND FUNCTION('MONTH', c.startedAt) = :month")
     List<Commute> findByEmployeeIdAndMonthAndYear(@Param("employeeId") Long employeeId, @Param("year") int year, @Param("month") int month);
 }
