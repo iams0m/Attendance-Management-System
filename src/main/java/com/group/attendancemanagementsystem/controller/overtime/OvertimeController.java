@@ -2,6 +2,7 @@ package com.group.attendancemanagementsystem.controller.overtime;
 
 import com.group.attendancemanagementsystem.dto.overtime.response.OvertimeResponse;
 import com.group.attendancemanagementsystem.service.overtime.OvertimeService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,7 @@ public class OvertimeController {
     }
 
     @GetMapping("/overtime")
-    public List<OvertimeResponse> employeeOvertimeList(YearMonth date) {
+    public List<OvertimeResponse> employeeOvertimeList(@DateTimeFormat(pattern = "yyyy-MM") YearMonth date) {
         return overtimeService.calculateOvertimeHours(date);
     }
 }
