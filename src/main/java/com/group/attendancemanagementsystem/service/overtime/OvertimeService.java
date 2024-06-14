@@ -6,22 +6,28 @@ import com.group.attendancemanagementsystem.domain.employee.Employee;
 import com.group.attendancemanagementsystem.dto.overtime.response.OvertimeResponse;
 import com.group.attendancemanagementsystem.repository.employee.EmployeeRepository;
 import com.group.attendancemanagementsystem.repository.overtime.OvertimeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Service
+@Transactional(readOnly = true)
 public class OvertimeService {
     private final EmployeeRepository employeeRepository;
     private final OvertimeRepository overtimeRepository;
