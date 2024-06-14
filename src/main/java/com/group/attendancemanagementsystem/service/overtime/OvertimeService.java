@@ -79,37 +79,46 @@ public class OvertimeService {
     }
 
     private int calculateWorkingDays(YearMonth yearMonth) {
-
         try {
             UriComponents uri = UriComponentsBuilder.newInstance()
                     .scheme("http")
                     .host("apis.data.go.kr")
                     .path("/B090041/openapi/service/SpcdeInfoService/getRestDeInfo")
-                    .queryParam("serviceKey", URLEncoder.encode("key", "UTF-8"))
-                    .queryParam("solYear", URLEncoder.encode(Integer.toString(yearMonth.getYear()), "UTF-8"))
-                    .queryParam("solMonth", URLEncoder.encode(String.format("%02d", yearMonth.getMonthValue()), "UTF-8"))
+                    .queryParam("serviceKey", URLEncoder.encode("key", StandardCharsets.UTF_8.toString()))
+                    .queryParam("solYear", URLEncoder.encode(Integer.toString(yearMonth.getYear()), StandardCharsets.UTF_8.toString()))
+                    .queryParam("solMonth", URLEncoder.encode(String.format("%02d", yearMonth.getMonthValue()), StandardCharsets.UTF_8.toString()))
                     .build();
 
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", MediaType.APPLICATION_JSON.toString());
-            headers.set("Accept", MediaType.APPLICATION_JSON.toString());
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
             HttpEntity<?> request = new HttpEntity<>(headers);
-            ResponseEntity<String> response = this.restTemplate.exchange(uri.toString(), HttpMethod.GET, request, String.class);
+            ResponseEntity<String> response = this.restTemplate.exchange(uri.toUriString(), HttpMethod.GET, request, String.class);
 
-            System.out.println(uri.toString());
-            System.out.println(response.getBody());
+            // 응답 상태 코드 및 본문 출력
+            System.out.println("URI: " + uri.toString());
+            System.out.println("Status Code: " + response.getStatusCode());
+            System.out.println("Response Body: " + response.getBody());
 
-            int totalHoliday = this.objectMapper.readTree(response.getBody()).path("response").path("body").path("totalCount").asInt();
-            int weekends = calculateWeekends(yearMonth);
-            System.out.println("uri = " + uri);
-            System.out.println("yearMonth.lengthOfMonth = " + yearMonth.lengthOfMonth());
-            System.out.println("totalHoliday = " + totalHoliday);
-            System.out.println("yearMonth.lengthOfMonth - totalHoliday - weekends = " + (yearMonth.lengthOfMonth() - totalHoliday - weekends));
+            // 응답 본문이 JSON 형식이 아닌 경우 예외 처리
+            if (response.getStatusCode().is2xxSuccessful() && response.getHeaders().getContentType().includes(MediaType.APPLICATION_JSON)) {
+                int totalHoliday = this.objectMapper.readTree(response.getBody()).path("response").path("body").path("totalCount").asInt();
+                int weekends = calculateWeekends(yearMonth);
 
-            return Math.max(yearMonth.lengthOfMonth() - totalHoliday - weekends, 0);
+                // 추가적인 디버깅 출력
+                System.out.println("yearMonth.lengthOfMonth = " + yearMonth.lengthOfMonth());
+                System.out.println("totalHoliday = " + totalHoliday);
+                System.out.println("yearMonth.lengthOfMonth - totalHoliday - weekends = " + (yearMonth.lengthOfMonth() - totalHoliday - weekends));
+
+                return Math.max(yearMonth.lengthOfMonth() - totalHoliday - weekends, 0);
+            } else {
+                System.err.println("Unexpected response format or status.");
+                return -1;
+            }
 
         } catch (Exception e) {
+            log.error("error occurred: {}", e.getMessage());
             return -1;
         }
     }
